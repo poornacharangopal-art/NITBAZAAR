@@ -35,6 +35,7 @@ router.get("/loginpage", (req, res) => {
     });
 
 });
+router.get("/dashboard", auth.dashboard);
 router.get("/profile", auth.profile);
 
 module.exports = router;
