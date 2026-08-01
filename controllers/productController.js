@@ -56,49 +56,51 @@ exports.addProduct=async(req,res)=>{
     }
 
 };
-exports.displayProducts=async(req,res)=>{
+exports.displayProducts = async(req,res)=>{
 
     const email=req.session.email;
 
     const user=await User.findOne({
-
         EmailId:email
-
     });
 
     if(!user){
-
         return res.redirect("/");
+    }
+
+    const sort=req.query.sort;
+
+    let products;
+
+    if(sort==="lowtohigh"){
+
+        products=await Product.find({
+            College:user.College
+        }).sort({
+            Cost:1
+        });
 
     }
-    const sort = req.query.sort;
+    else if(sort==="hightolow"){
 
-let products;
+        products=await Product.find({
+            College:user.College
+        }).sort({
+            Cost:-1
+        });
 
-if(sort === "lowtohigh"){
+    }
+    else{
 
-    products = await Product.find({ College: user.College })
-                            .sort({ Cost: 1 });
+        products=await Product.find({
+            College:user.College
+        });
 
-}
-else if(sort === "hightolow"){
+    }
 
-    products = await Product.find({ College: user.College })
-                            .sort({ Cost: -1 });
 
-}
-else{
-
-    products = await Product.find({ College: user.College });
-
-}
-
-res.render("displayproducts", { products });
-
-    res.render("displayproducts",{
-
+    return res.render("displayproducts",{
         products
-
     });
 
 };
