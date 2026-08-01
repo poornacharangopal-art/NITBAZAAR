@@ -171,5 +171,23 @@ exports.profile = async (req, res) => {
         user
 
     });
+};
+exports.dashboard = async (req, res) => {
+
+    if (!req.session.user) {
+        return res.redirect("/");
+    }
+
+    const user = await User.findOne({
+        EmailId: req.session.email
+    });
+
+    if (!user) {
+        return res.redirect("/");
+    }
+
+    res.render("dashboard", {
+        user
+    });
 
 };
